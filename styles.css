@@ -442,3 +442,20 @@ nav button{
   font-size: clamp(11px, 2.6vw, 14px);
   min-height: 38px;
 }
+/* Zawijanie bardzo długich słów / URL-i w kartach listy (Dziennik, Zadania, Wydarzenia) */
+.list .item > div:first-child,
+.list .item > div:first-child * {
+  overflow-wrap: anywhere;   /* główne: łamie w dowolnym miejscu, także w URL */
+  word-break: break-word;    /* fallback dla Safari/WebKit */
+  white-space: pre-wrap;     /* zachowaj łamania linii z <br>, ale pozwól zawijać */
+}
+
+/* Dla linków (gdybyś kiedyś zamieniła URL-e na <a href=...>) */
+.list a {
+  overflow-wrap: anywhere;
+  word-break: break-word;
+}
+
+/* Na wszelki wypadek: element tekstowy nie może „pchać” karty szerzej niż 100% */
+.item { max-width: 100%; }
+.item > div:first-child { min-width: 0; }
