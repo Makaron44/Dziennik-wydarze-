@@ -26,6 +26,7 @@
       </div>
     </div>
     <nav>
+      <button id="tab-today">Dziś</button>
       <button id="tab-journal" class="active">Dziennik</button>
       <button id="tab-events">Wydarzenia</button>
       <button id="tab-tasks">Ważne rzeczy</button>
@@ -34,6 +35,29 @@
   </header>
 
   <main>
+    <section id="panel-today" class="panel hidden">
+  <div id="today-header" class="muted" style="margin-bottom:8px;"></div>
+
+  <h3>Dzisiejsze wydarzenia</h3>
+  <div id="today-events" class="list"></div>
+  <div class="row" style="margin-top:6px;">
+    <button id="go-events" class="btn-secondary">Otwórz Wydarzenia</button>
+  </div>
+
+  <h3 style="margin-top:14px;">Najważniejsze zadania</h3>
+  <div id="today-tasks" class="list"></div>
+  <div class="row" style="margin-top:6px;">
+    <button id="go-tasks" class="btn-secondary">Otwórz Ważne rzeczy</button>
+  </div>
+
+  <form id="today-journal-form" class="form-grid" style="margin-top:14px;">
+    <label class="field">
+      <span>Szybka notatka (Dziennik – dziś)</span>
+      <textarea id="today-journal-text" placeholder="Jak się czujesz? Co dziś planujesz?"></textarea>
+    </label>
+    <button type="submit" class="full">Zapisz do Dziennika</button>
+  </form>
+</section>
     <!-- DZIENNIK -->
     <section id="panel-journal" class="panel">
       <form id="journal-form">
