@@ -1,0 +1,427 @@
+/* ========= ZMIENNE (LIGHT) ========= */
+:root{
+  --bg:#f6f8fb;
+  --card:#ffffff;
+  --text:#111827;
+  --muted:#6b7280;
+  --accent:#2b6cb0;
+
+  --border:#e6eef8;
+  --radius:12px;
+
+  /* Neon */
+  --neon-pink:#ff4dff;
+}
+
+/* ========= ZMIENNE (DARK) ========= */
+[data-theme="dark"]{
+  --bg:#0b0f19;
+  --card:#0f1629;
+  --text:#e5e7eb;
+  --muted:#9aa4b2;
+  --accent:#7aa2ff;
+
+  --border:#1f2a44;
+
+  --neon-pink:#ff5df2;
+}
+
+/* ========= BAZA ========= */
+*{box-sizing:border-box; font-family:Inter,system-ui,Arial,Helvetica,sans-serif}
+html,body{height:100%}
+body{margin:0;background:var(--bg);color:var(--text);display:flex;flex-direction:column}
+
+header{background:linear-gradient(90deg, #ffffff00, #eef6ff30);padding:16px;border-bottom:1px solid var(--border)}
+[data-theme="dark"] header{background:linear-gradient(90deg, #00000000, #1b244430)}
+.header-top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+header h1{margin:0 0 12px 0;font-size:20px}
+.header-actions{display:flex;gap:8px}
+
+nav{display:flex;gap:8px}
+nav button{
+  flex:1; padding:9px 12px; border:1px solid #cfe1ff; background:#f1f6ff;
+  color:#2b4a6d; border-radius:10px; cursor:pointer; font-weight:600
+}
+nav button.active{background:var(--accent); color:#fff; border-color:transparent}
+[data-theme="dark"] nav button{background:#17223c;color:#cfe1ff;border-color:#273259}
+[data-theme="dark"] nav button.active{background:var(--accent); color:#0b0f19}
+
+main{padding:16px; flex:1; max-width:900px; width:100%; margin:0 auto}
+.panel{background:var(--card); padding:14px; border-radius:var(--radius);
+  box-shadow:0 6px 18px rgba(20,30,50,0.06); margin-bottom:14px; border:1px solid var(--border)}
+.hidden{display:none}
+
+.form-grid{display:grid; grid-template-columns:1fr; gap:10px}
+.field{display:flex; flex-direction:column; gap:6px}
+.field span{font-size:14px; color:var(--muted)}
+.hint{font-size:13px}
+
+input, textarea, select, button{
+  font-size:16px; /* iOS bez auto-zoomu */
+  line-height:1.3;
+}
+textarea{width:100%;min-height:110px;padding:10px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;color:#111}
+[data-theme="dark"] textarea{background:#0d1324;color:var(--text);border-color:#1f2a44}
+input[type="text"],input[type="date"],input[type="time"],input[type="number"],select{
+  padding:10px;border-radius:10px;border:1px solid #e2e8f0;background:#fff;color:#111;width:100%
+}
+[data-theme="dark"] input[type="text"],[data-theme="dark"] input[type="date"],[data-theme="dark"] input[type="time"],[data-theme="dark"] input[type="number"],[data-theme="dark"] select{
+  background:#0d1324;color:var(--text);border-color:#1f2a44
+}
+
+/* Przyciski – bazowe mniejsze, pełna szerokość tylko z .full */
+button{background:var(--accent);color:#fff;border:none;padding:9px 12px;border-radius:10px;cursor:pointer}
+button.full{width:100%}
+.btn-secondary{background:#4a5568}
+.btn-danger{background:#c53030}
+
+/* LISTY / KARTY */
+.list{margin-top:12px; display:flex; flex-direction:column; gap:10px}
+.item{
+  padding:12px;border-radius:12px;background:#fafcff;border:1px solid #eef6ff;
+  display:flex;justify-content:space-between;align-items:center; gap:10px
+}
+[data-theme="dark"] .item{background:#0d1324;border-color:#1f2a44}
+.item small{color:var(--muted)}
+.item .controls{display:flex;gap:6px; flex-shrink:0}
+.item .controls button{padding:6px 10px; font-size:14px; border-radius:8px} /* KOMPATKOWE */
+
+/* ZROBIONE (tasks) */
+.item.done{opacity:.65; filter:saturate(.7)}
+.item.done strong, .item.done div:first-child{ text-decoration: line-through }
+
+/* Badge priorytetu */
+.badge{display:inline-block; padding:2px 8px; border-radius:999px; font-size:12px; margin-left:6px; border:1px solid transparent}
+.badge.low{background:#e6fffa; border-color:#b2f5ea}
+.badge.medium{background:#e6f0ff; border-color:#cfe1ff}
+.badge.high{background:#1a1024; color:#fff; border-color:#ffb3ff; box-shadow:0 0 8px var(--neon-pink)}
+
+/* Neon dla ważnych rzeczy (wysoki priorytet, nie zrobione) */
+.item.priority-high:not(.done){
+  box-shadow:0 0 8px color-mix(in srgb, var(--neon-pink) 40%, transparent),
+             0 0 18px color-mix(in srgb, var(--neon-pink) 25%, transparent),
+             inset 0 0 0 1px color-mix(in srgb, var(--neon-pink) 60%, transparent);
+  border-color: color-mix(in srgb, var(--neon-pink) 45%, #eef6ff);
+}
+
+/* Drobne */
+.muted{color:var(--muted)}
+.row{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+
+.footer-row{display:flex; gap:8px; justify-content:center; flex-wrap:wrap; margin-bottom:8px}
+.footer-row button{padding:7px 10px; font-size:14px; border-radius:10px}
+
+/* Bezpieczne wcięcia przy notch */
+@supports(padding:max(0px)) {
+  body{padding-left: max(0px, env(safe-area-inset-left)); padding-right:max(0px, env(safe-area-inset-right))}
+}
+
+/* ====== MINI KALENDARZ ====== */
+.mini-cal{margin-top:12px; border:1px solid var(--border); border-radius:12px; padding:10px}
+.cal-header{display:flex; align-items:center; justify-content:space-between; margin-bottom:8px}
+.cal-title{font-weight:700}
+.cal-nav{background:transparent; color:var(--text); border:1px solid var(--border); padding:6px 10px; border-radius:8px; cursor:pointer}
+
+.cal-grid{display:grid; grid-template-columns: repeat(7, 1fr); gap:6px}
+.cal-grid .dow{font-size:12px; color:var(--muted); text-align:center; padding:4px 0}
+.cal-cell{
+  border:1px solid var(--border); background:#fff; color:#111; border-radius:10px;
+  padding:6px; text-align:center; position:relative; min-height:38px; cursor:pointer;
+}
+[data-theme="dark"] .cal-cell{background:#0d1324; color:var(--text); border-color:#1f2a44}
+.cal-cell .num{font-weight:600; font-size:14px}
+.cal-cell .dots{position:absolute; bottom:6px; left:50%; transform:translateX(-50%); display:flex; gap:3px}
+.dot{width:6px; height:6px; border-radius:50%; background:#9aa4b2; opacity:.9}
+.dot.ev{background:var(--accent)}
+.cal-cell.today{outline:2px solid var(--accent)}
+.cal-cell.selected{box-shadow:0 0 0 2px var(--accent) inset}
+
+/* Respons: na szerokich ekranach formularze w 2 kolumnach */
+@media (min-width: 720px){
+  #panel-events .form-grid{grid-template-columns: repeat(4, 1fr)}
+  #panel-events .form-grid > button.full{grid-column: 1 / -1}
+
+  #panel-tasks .form-grid{grid-template-columns: 2fr 1fr}
+  #panel-tasks .form-grid > button{grid-column: 1 / -1}
+
+  #panel-journal .form-grid{grid-template-columns: 1fr 1fr}
+  #panel-journal .form-grid > button{grid-column: 1 / -1}
+
+  #panel-backup .form-grid{grid-template-columns: 1fr}
+}
+html, body { overflow-x: hidden; } /* stop poziomemu scrollowi */
+
+/* Zakładki: 4 równe kolumny, bez wypychania */
+nav{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+nav button{ min-width: 0; } /* pozwala się ścisnąć */
+/* panel przytnie ewentualne cienie/krawędzie */
+.panel{ overflow: hidden; }
+
+/* karta może przejść w dwie linie */
+.item{
+  display:flex;
+  flex-wrap: wrap;        /* <— KLUCZ: pozwól zawijanie */
+  align-items: flex-start; 
+}
+
+/* lewa kolumna (tytuł + opis) ma 1. priorytet miejsca */
+.item > div:first-child{
+  flex: 1 1 220px;
+  min-width: 0;
+}
+
+/* prawa kolumna (przyciski) może się zawijać */
+.item .controls{
+  display:flex;
+  gap:6px;
+  flex: 0 1 auto;         /* NIE blokuj zwężania */
+  flex-wrap: wrap;        /* pozwól wejść w 2. wiersz */
+  justify-content: flex-end;
+}
+
+/* Na bardzo wąskich ekranach przyciski pod treścią, na całą szerokość karty */
+@media (max-width: 420px){
+  .item > div:first-child{ flex-basis: 100%; }
+  .item .controls{ width:100%; justify-content:flex-start; }
+}
+.item .controls button{
+  padding:6px 9px;
+  font-size:13px;
+  border-radius:8px;
+}
+/* domyślnie (jasny) – zostaje bez zmian */
+
+/* ciemny: wyższy kontrast tekstu i tła */
+[data-theme="dark"] .badge{ color:#eaf1ff; }
+[data-theme="dark"] .badge.low{
+  background: rgba(41, 224, 224, .16);
+  border-color:#29e0e0;
+  color:#c9ffff;
+}
+[data-theme="dark"] .badge.medium{
+  background: rgba(122, 162, 255, .16);
+  border-color:#7aa2ff;
+  color:#dbe4ff;
+}
+/* === 1) Zakładki: tekst ma się mieścić i ładnie zawijać === */
+html, body { overflow-x: hidden; }
+
+nav{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+nav button{
+  min-width: 0;              /* pozwól się ścisnąć */
+  padding: 8px 10px;
+  line-height: 1.15;
+  white-space: normal;       /* ZAWIJAJ */
+  word-break: keep-all;
+  text-align: center;
+  font-size: clamp(12px, 3.2vw, 14px);  /* skalowanie na małych ekranach */
+  min-height: 38px;          /* stała wysokość, bez "wychodzenia" tekstu */
+}
+
+/* === 2) Karty i przyciski w zadaniach – nic nie wychodzi poza ramkę === */
+.panel{ overflow: hidden; }   /* przytnij ewentualne cienie */
+
+.item{
+  display:flex;
+  flex-wrap: wrap;           /* klucz: pozwól zawijanie */
+  align-items:flex-start;
+  max-width: 100%;
+}
+.item > div:first-child{
+  flex: 1 1 220px;
+  min-width: 0;              /* pozwala skracać tytuł */
+}
+.item .controls{
+  display:flex;
+  gap:6px;
+  flex: 0 1 auto;
+  flex-wrap: wrap;           /* przyciski mogą spaść do drugiej linii */
+  justify-content:flex-end;
+  max-width:100%;
+}
+.item .controls button{
+  padding:6px 9px;
+  font-size:13px;
+  border-radius:8px;
+  flex: 0 0 auto;            /* nie rozciągaj nadmiernie */
+}
+
+/* Na bardzo wąskich ekranach przyciski pod treścią na pełną szerokość karty */
+@media (max-width: 420px){
+  .item > div:first-child{ flex-basis: 100%; }
+  .item .controls{ width:100%; justify-content:flex-start; }
+}
+
+/* === 3) Ciemny motyw – lepszy kontrast badge Średni/Niski === */
+[data-theme="dark"] .badge{ color:#eaf1ff; }
+[data-theme="dark"] .badge.low{
+  background: rgba(41, 224, 224, .16);
+  border-color:#29e0e0;
+  color:#c9ffff;
+}
+[data-theme="dark"] .badge.medium{
+  background: rgba(122, 162, 255, .16);
+  border-color:#7aa2ff;
+  color:#dbe4ff;
+}
+
+/* === 4) Panel „Kopia” – guziki zgrane z układem, bez „belki” do krawędzi === */
+#panel-backup .form-grid{
+  grid-template-columns: 1fr;
+  justify-items: center;          /* środkuj elementy */
+}
+#panel-backup .form-grid > button.full,
+#panel-backup .form-grid > .btn-danger.full{
+  width: 100%;
+  max-width: 480px;               /* niech będą „kardowe”, nie na całą szerokość panelu */
+  border-radius: 10px;
+}
+#panel-backup .row{
+  width: 100%;
+  max-width: 480px;
+}
+/* === A) Zakładki: niech tekst się mieści / ładnie zawija === */
+nav{
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 8px;
+  width: 100%;
+}
+nav button{
+  min-width: 0;
+  padding: 10px 12px;           /* trochę więcej oddechu */
+  line-height: 1.2;
+  white-space: normal;          /* pozwól zawijać */
+  hyphens: auto;                /* dzielenie (pl) */
+  overflow-wrap: anywhere;      /* w razie potrzeby złamie długie słowo */
+  word-break: break-word;
+  text-align: center;
+  font-size: clamp(11px, 2.6vw, 14px);  /* minimalnie mniejsze na wąskich ekranach */
+  min-height: 38px;
+}
+
+/* === B) Panel „Kopia”: przyciski nie do krawędzi, centrowane === */
+#panel-backup .form-grid{
+  grid-template-columns: 1fr;
+  justify-items: center;
+}
+
+#panel-backup .form-grid > button.full,
+#panel-backup .btn-danger.full{
+  display: block;
+  width: clamp(220px, 92%, 480px);  /* nie do samej krawędzi panelu */
+  margin: 0 auto;                   /* wyśrodkuj */
+  border-radius: 10px;
+}
+
+#panel-backup .row{
+  width: clamp(220px, 92%, 480px);  /* „Wybierz plik + Importuj” tej samej szerokości */
+  margin: 0 auto;
+}
+
+/* Dodatkowe bezpieczeństwo: nic nie wyjdzie poza szerokość ekranu */
+html, body { overflow-x: hidden; }
+/* ——— Panel „Kopia” bez przycinania i z równymi, zaokrąglonymi przyciskami ——— */
+#panel-backup.panel{ 
+  overflow: visible;                 /* pozwól rogom być w całości widocznymi */
+}
+
+#panel-backup .form-grid{
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 12px;
+  padding-inline: 4px;               /* drobny „oddech” od krawędzi */
+}
+
+/* długie guziki: idealnie wycentrowane i równe krawędzie */
+#panel-backup .form-grid > button.full,
+#panel-backup .btn-danger.full{
+  display: block;
+  width: min(100%, 520px);           /* nie do samej krawędzi panelu */
+  margin-inline: auto;               /* wyśrodkuj */
+  border-radius: 14px;               /* bardziej widoczne zaokrąglenie */
+  background-clip: padding-box;      /* pewność, że widać zaokrąglenie */
+  padding-block: 12px;               /* spójna wysokość */
+}
+
+/* pasek z inputem pliku tej samej szerokości co przyciski */
+#panel-backup .row{
+  width: min(100%, 520px);
+  margin-inline: auto;
+}
+
+/* drobny retusz: na bardzo wąskich ekranach zmniejsz minimalnie font na przyciskach */
+@media (max-width: 380px){
+  #panel-backup .form-grid > button.full,
+  #panel-backup .btn-danger.full{
+    font-size: 15px;
+  }
+}
+/* ——— KOPIA: krótsze, równe przyciski ——— */
+#panel-backup.panel{ overflow: visible; }
+
+#panel-backup .form-grid{
+  grid-template-columns: 1fr;
+  justify-items: center;
+  row-gap: 12px;
+}
+
+/* Eksportuj + Wyczyść — zwężone, wyśrodkowane, równe kąty */
+#panel-backup .form-grid > button.full,
+#panel-backup .btn-danger.full{
+  width: clamp(220px, 80vw, 340px) !important;  /* ← krótsze */
+  margin: 0 auto !important;
+  border-radius: 14px !important;
+  padding-block: 12px !important;
+  display: block !important;
+}
+
+/* Pasek z inputem pliku tej samej szerokości */
+#panel-backup .row{
+  width: clamp(220px, 80vw, 340px) !important;
+  margin: 0 auto !important;
+}
+/* Safe-area dla PWA (iOS notch / home bar) */
+@supports(padding: max(0px)) {
+  /* mieliśmy L/R – dokładamy TOP/BOTTOM */
+  body{
+    padding-left:  max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+  header{
+    /* dociułanie na górze gdy status bar jest przezroczysty */
+    padding-top: calc(16px + env(safe-area-inset-top));
+  }
+  footer{
+    /* niech stopka nie schodzi pod pasek gestów */
+    padding-bottom: calc(8px + env(safe-area-inset-bottom));
+  }
+
+  /* tylko gdy appka działa jako PWA (dodana na ekran) – opcjonalne doprecyzowanie */
+  @media (display-mode: standalone) {
+    header{ padding-top: calc(16px + env(safe-area-inset-top)); }
+    footer{ padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+  }
+}
+@supports(padding: max(0px)) {
+  body{
+    padding-left:  max(0px, env(safe-area-inset-left));
+    padding-right: max(0px, env(safe-area-inset-right));
+  }
+  header{ padding-top: calc(16px + env(safe-area-inset-top)); }
+  footer{ padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+  @media (display-mode: standalone) {
+    header{ padding-top: calc(16px + env(safe-area-inset-top)); }
+    footer{ padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
+  }
+}

@@ -1,0 +1,30 @@
+{
+  "name": "Mój Dziennik",
+  "short_name": "Dziennik",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0f1629",
+  "theme_color": "#7aa2ff",
+  "categories": ["productivity", "utilities"],
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    { "name": "Dziennik", "short_name": "Dziennik", "url": "./index.html#journal" },
+    { "name": "Wydarzenia", "short_name": "Wydarzenia", "url": "./index.html#events" },
+    { "name": "Ważne rzeczy", "short_name": "Zadania", "url": "./index.html#tasks" }
+  ]
+}

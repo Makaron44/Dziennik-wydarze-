@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="pl">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<!-- PWA manifest -->
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/icon-192.png">
+<!-- iOS PWA: pełny ekran + status bar przezroczysty -->
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+<!-- Kolor paska (Android / iOS) -->
+<meta name="theme-color" content="#f6f8fb" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#0f1629" media="(prefers-color-scheme: dark)">
+  <title>Mój Dziennik • Kalendarz • Przypomnienia</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header>
+    <div class="header-top">
+      <h1>Mój Dziennik</h1>
+      <div class="header-actions">
+        <button id="theme-toggle" class="btn-secondary" title="Przełącz tryb jasny/ciemny">🌙 Tryb nocny</button>
+      </div>
+    </div>
+    <nav>
+      <button id="tab-journal" class="active">Dziennik</button>
+      <button id="tab-events">Wydarzenia</button>
+      <button id="tab-tasks">Ważne rzeczy</button>
+      <button id="tab-backup">Kopia</button>
+    </nav>
+  </header>
+
+  <main>
+    <!-- DZIENNIK -->
+    <section id="panel-journal" class="panel">
+      <form id="journal-form">
+        <textarea id="journal-text" placeholder="Napisz coś..."></textarea>
+
+        <div class="form-grid">
+          <label class="field">
+            <span>Data</span>
+            <input type="date" id="journal-date" />
+          </label>
+
+          <button type="submit" id="journal-submit" class="full">Zapisz wpis</button>
+          <button type="button" id="journal-cancel-edit" class="btn-secondary full" style="display:none;">Anuluj edycję</button>
+        </div>
+      </form>
+
+      <div class="form-grid" style="margin-top:10px;">
+        <label class="field">
+          <span>Filtr daty (podgląd)</span>
+          <input type="date" id="journal-filter-date" />
+        </label>
+        <button type="button" id="journal-filter-clear" class="full">Pokaż wszystkie</button>
+      </div>
+
+      <div id="journal-list" class="list" style="margin-top:12px;"></div>
+    </section>
+
+    <!-- WYDARZENIA -->
+    <section id="panel-events" class="panel hidden">
+      <form id="event-form" class="form-grid">
+        <label class="field">
+          <span>Tytuł wydarzenia</span>
+          <input type="text" id="event-title" placeholder="Np. Wizyta u dentysty" required />
+        </label>
+        <label class="field">
+          <span>Data</span>
+          <input type="date" id="event-date" required />
+        </label>
+        <label class="field">
+          <span>Godzina</span>
+          <input type="time" id="event-time" required />
+        </label>
+        <label class="field">
+          <span>Przypomnienie (min przed)</span>
+          <input type="number" id="event-remind-min" value="10" min="0" />
+        </label>
+        <button type="submit" class="full">Dodaj wydarzenie</button>
+      </form>
+
+      <!-- MINI KALENDARZ -->
+      <div class="mini-cal">
+        <div class="cal-header">
+          <button id="cal-prev" class="cal-nav" aria-label="Poprzedni miesiąc">‹</button>
+          <div id="cal-title" class="cal-title">Miesiąc RRRR</div>
+          <button id="cal-next" class="cal-nav" aria-label="Następny miesiąc">›</button>
+        </div>
+        <div class="cal-grid" id="cal-grid"></div>
+        <div class="cal-legend muted">Kliknij dzień, aby ustawić datę wydarzenia i przefiltrować listę.</div>
+      </div>
+
+      <div class="events-filter form-grid" style="margin-top:10px;">
+        <label class="field">
+          <span>Filtr dnia</span>
+          <input type="date" id="events-filter-date" />
+        </label>
+        <button type="button" id="events-filter-clear" class="full">Pokaż wszystkie</button>
+      </div>
+
+      <h3>Nadchodzące</h3>
+      <div id="events-list" class="list"></div>
+    </section>
+
+    <!-- WAŻNE RZECZY / TASKS -->
+    <section id="panel-tasks" class="panel hidden">
+      <form id="task-form" class="form-grid">
+        <label class="field">
+          <span>Tytuł zadania</span>
+          <input type="text" id="task-title" placeholder="Co trzeba zrobić?" required />
+        </label>
+        <label class="field">
+          <span>Priorytet</span>
+          <select id="task-priority">
+            <option value="low">Niski</option>
+            <option value="medium" selected>Średni</option>
+            <option value="high">Wysoki</option>
+          </select>
+        </label>
+        <button type="submit" id="task-submit" class="full">Dodaj</button>
+        <button type="button" id="task-cancel-edit" class="btn-secondary full" style="display:none;">Anuluj edycję</button>
+      </form>
+
+      <!-- FILTRY ZADAŃ -->
+      <div class="form-grid" style="margin-top:10px;">
+        <label class="field">
+          <span>Status</span>
+          <select id="task-filter-status">
+            <option value="all">Wszystkie</option>
+            <option value="active">Aktywne</option>
+            <option value="done">Zrobione</option>
+          </select>
+        </label>
+        <label class="field">
+          <span>Priorytet</span>
+          <select id="task-filter-priority">
+            <option value="all">Wszystkie</option>
+            <option value="high">Wysoki</option>
+            <option value="medium">Średni</option>
+            <option value="low">Niski</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="hint muted">Wysoki priorytet ma neonowe wyróżnienie ✨</div>
+      <div id="tasks-list" class="list" style="margin-top:10px;"></div>
+    </section>
+
+    <!-- KOPIA – OSOBNA ZAKŁADKA -->
+    <section id="panel-backup" class="panel hidden">
+      <h3>Kopia zapasowa</h3>
+      <div class="form-grid">
+        <button type="button" id="export-btn" class="full">Eksportuj do JSON</button>
+
+        <div class="field">
+          <span>Import z pliku JSON</span>
+          <div class="row">
+            <input type="file" id="import-input" accept="application/json" />
+            <button type="button" id="import-btn">Importuj</button>
+          </div>
+          <small class="muted">Uwaga: import zastąpi Twoje obecne dane (Dziennik, Wydarzenia, Zadania, Ustawienia).</small>
+        </div>
+
+        <button type="button" id="wipe-btn" class="btn-danger full">Wyczyść wszystkie dane</button>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-row">
+      <button id="notify-perm">Włącz powiadomienia</button>
+      <button id="sound-toggle" class="btn-secondary">🔔 Dźwięk: włączony</button>
+      <button id="sound-test">Test dźwięku</button>
+    </div>
+    <small>Przypomnienia działają, gdy strona jest otwarta. Aby działały zawsze, trzeba dodać push + serwer.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
