@@ -4,17 +4,20 @@ const qsa = s=>document.querySelectorAll(s);
 
 // Tabs
 const tabs = {
+  todayBtn: qs('#tab-today'),
   journalBtn: qs('#tab-journal'),
   eventsBtn: qs('#tab-events'),
   tasksBtn: qs('#tab-tasks'),
   backupBtn: qs('#tab-backup'),
   panels: {
+    today: qs('#panel-today'),
     journal: qs('#panel-journal'),
     events: qs('#panel-events'),
     tasks: qs('#panel-tasks'),
     backup: qs('#panel-backup'),
   }
 };
+tabs.todayBtn?.addEventListener('click', ()=>switchTab('today'));
 tabs.journalBtn.addEventListener('click', ()=>switchTab('journal'));
 tabs.eventsBtn.addEventListener('click', ()=>switchTab('events'));
 tabs.tasksBtn.addEventListener('click', ()=>switchTab('tasks'));
@@ -78,6 +81,7 @@ function renderJournal(){
   let entries = DB.load('journal'); let changed=false;
   entries.forEach(e=>{ if(!e.id){ e.id = randomId(); changed=true; } });
   if(changed) DB.save('journal', entries);
+  renderToday();
 
   const filter = journalFilterDate?.value || '';
   if(filter){ entries = entries.filter(e => e.date === filter); }
@@ -247,6 +251,7 @@ function buildMiniCalendarSkeleton(){
 }
 function renderMiniCalendarGrid(){
   qsa('#cal-grid .cal-cell').forEach(n=>n.remove());
+  renderToday();
 
   const first = new Date(calYear, calMonth, 1);
   const lastDay = new Date(calYear, calMonth+1, 0).getDate();
@@ -343,6 +348,7 @@ function renderTasks(){
   let arr = DB.load('tasks'); let changed=false;
   arr.forEach(t=>{ if(!t.id){ t.id = randomId(); changed=true; } });
   if(changed) DB.save('tasks', arr);
+  renderToday();
 
   arr = applyTaskFilters(arr);
 
@@ -417,6 +423,90 @@ taskCancelEditBtn.addEventListener('click', ()=>{ setTaskEditing(null); taskForm
 taskFilterStatus?.addEventListener('change', renderTasks);
 taskFilterPriority?.addEventListener('change', renderTasks);
 renderTasks();
+// ===== Widok "Dziś" =====
+const todayHeader = qs('#today-header');
+const todayEventsList = qs('#today-events');
+const todayTasksList = qs('#today-tasks');
+const todayJournalForm = qs('#today-journal-form');
+const todayJournalText = qs('#today-journal-text');
+const goEventsBtn = qs('#go-events');
+const goTasksBtn = qs('#go-tasks');
+
+function renderToday(){
+  const now = new Date();
+  const dayStr = now.toISOString().slice(0,10);
+  const fmt = new Intl.DateTimeFormat('pl-PL', { weekday:'long', day:'2-digit', month:'long' });
+  todayHeader.innerHTML = `<strong>${fmt.format(now)}</strong>`;
+
+  // --- Wydarzenia dzisiaj
+  let evs = DB.load('events').filter(ev => ev.when.slice(0,10) === dayStr)
+    .sort((a,b)=> new Date(a.when) - new Date(b.when));
+
+  todayEventsList.innerHTML = evs.length ? evs.map(ev=>{
+    const t = new Date(ev.when).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+    return `
+      <div class="item">
+        <div><strong>${t}</strong> – ${escapeHtml(ev.title)}</div>
+        <div class="controls">
+          <button data-ics="${ev.id}" class="btn-secondary">Do kalendarza</button>
+        </div>
+      </div>`;
+  }).join('') : '<em>Brak wydarzeń dzisiaj</em>';
+
+  // --- 3 najważniejsze zadania (niezrobione)
+  let tasks = DB.load('tasks')
+    .filter(t => !t.done)
+    .sort((a,b)=> (priorityWeight(b.priority)-priorityWeight(a.priority)) || ((b.created||0)-(a.created||0)))
+    .slice(0,3);
+
+  todayTasksList.innerHTML = tasks.length ? tasks.map(t=>{
+    const badge = `<span class="badge ${t.priority}">${t.priority==='high'?'Wysoki':t.priority==='medium'?'Średni':'Niski'}</span>`;
+    return `
+      <div class="item" data-id="${t.id}">
+        <div><strong>${escapeHtml(t.title)}</strong> ${badge}</div>
+        <div class="controls">
+          <button data-done="${t.id}">Zrobione</button>
+        </div>
+      </div>`;
+  }).join('') : '<em>Brak zadań do zrobienia</em>';
+}
+
+// Akcje w widoku "Dziś"
+todayEventsList?.addEventListener('click', e=>{
+  const idIcs = e.target.dataset.ics;
+  if(idIcs){
+    const ev = DB.load('events').find(x=>x.id===idIcs);
+    if(ev) downloadICSForEvent(ev);
+  }
+});
+todayTasksList?.addEventListener('click', e=>{
+  const idDone = e.target.dataset.done;
+  if(idDone){
+    const arr = DB.load('tasks');
+    const t = arr.find(x=>x.id===idDone);
+    if(t){ t.done = true; DB.save('tasks', arr); renderTasks(); renderToday(); }
+  }
+});
+goEventsBtn?.addEventListener('click', ()=>{
+  const day = (new Date()).toISOString().slice(0,10);
+  eventsSelectedDate = day;
+  if(eventsFilterDate) eventsFilterDate.value = day;
+  switchTab('events'); renderEvents();
+});
+goTasksBtn?.addEventListener('click', ()=>{ switchTab('tasks'); });
+
+// Szybki zapis notatki do dzisiejszego dziennika
+todayJournalForm?.addEventListener('submit', (e)=>{
+  e.preventDefault();
+  const text = todayJournalText.value.trim();
+  if(!text) return;
+  const arr = DB.load('journal');
+  const day = (new Date()).toISOString().slice(0,10);
+  arr.unshift({ id: randomId(), text, date: day, created: Date.now() });
+  DB.save('journal', arr);
+  todayJournalText.value = '';
+  renderJournal(); renderToday();
+});
 
 // =================== POWIADOMIENIA + DŹWIĘK + SCHEDULER ===================
 const notifyBtn = qs('#notify-perm');
