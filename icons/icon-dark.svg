@@ -1,0 +1,46 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1024" height="1024" viewBox="0 0 1024 1024">
+  <defs>
+    <!-- Glow -->
+    <filter id="glow-blue" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="12" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="glow-pink" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="16" result="b"/>
+      <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0" stop-color="#121a2e"/>
+      <stop offset="1" stop-color="#0b0f19"/>
+    </linearGradient>
+    <radialGradient id="soft" cx="50%" cy="40%" r="60%">
+      <stop offset="0" stop-color="#1c2440"/>
+      <stop offset="1" stop-color="transparent"/>
+    </radialGradient>
+  </defs>
+
+  <!-- tło (maskowalne) -->
+  <rect x="0" y="0" width="1024" height="1024" rx="220" fill="url(#bg)"/>
+  <rect x="0" y="0" width="1024" height="1024" rx="220" fill="url(#soft)"/>
+
+  <!-- wewnętrzna ramka z neonem -->
+  <rect x="84" y="84" width="856" height="856" rx="180" fill="none" stroke="#7aa2ff" stroke-width="10" filter="url(#glow-blue)"/>
+
+  <!-- „zakładka” neon pink -->
+  <path d="M840 200 c0-22-18-40-40-40h-140a40 40 0 0 0-40 40v0a40 40 0 0 0 40 40h60l40 60 40-60h40a40 40 0 0 0 40-40z"
+        fill="#ff5df2" opacity="0.9" filter="url(#glow-pink)"/>
+
+  <!-- okrąg z checkiem (w bezpiecznej strefie ~70% środka) -->
+  <circle cx="512" cy="560" r="220" fill="#0f1629" stroke="#7aa2ff" stroke-width="12" filter="url(#glow-blue)"/>
+  <path d="M420 560 l70 70 150-160" fill="none" stroke="#b6ff3b" stroke-width="40" stroke-linecap="round" stroke-linejoin="round" filter="url(#glow-pink)"/>
+
+  <!-- delikatne linie „notatnika” -->
+  <g opacity="0.25" stroke="#cfe1ff">
+    <line x1="300" y1="760" x2="724" y2="760" stroke-width="8"/>
+    <line x1="300" y1="820" x2="640" y2="820" stroke-width="8"/>
+  </g>
+
+  <!-- pomocnicza (opcjonalna) safe-area: koło 82% – usuń po testach
+  <circle cx="512" cy="512" r="420" fill="none" stroke="#00f7ff" stroke-dasharray="10 14" opacity="0.25"/>
+  -->
+</svg>
