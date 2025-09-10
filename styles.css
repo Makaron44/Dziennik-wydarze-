@@ -425,3 +425,20 @@ html, body { overflow-x: hidden; }
     footer{ padding-bottom: calc(8px + env(safe-area-inset-bottom)); }
   }
 }
+/* Nawigacja – 5 zakładek, bez ścisku, może się zawijać w 2 rzędy */
+nav{
+  display: grid;
+  grid-template-columns: repeat( auto-fit, minmax(110px, 1fr) );
+  gap: 8px;
+  width: 100%;
+}
+nav button{
+  min-width: 0;
+  padding: 10px 12px;
+  line-height: 1.2;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  text-align: center;
+  font-size: clamp(11px, 2.6vw, 14px);
+  min-height: 38px;
+}
