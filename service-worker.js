@@ -1,5 +1,5 @@
 /* Simple offline-first SW for "Mój Dziennik" */
-const VERSION = 'v1.0.0';
+const VERSION = 'v1.0.1';
 const CACHE = `md-static-${VERSION}`;
 
 const ASSETS = [
