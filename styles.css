@@ -459,3 +459,68 @@ nav button{
 /* Na wszelki wypadek: element tekstowy nie może „pchać” karty szerzej niż 100% */
 .item { max-width: 100%; }
 .item > div:first-child { min-width: 0; }
+/* ===== DZIŚ – neonowe wyróżnienia (tylko w tym panelu) ===== */
+#panel-today { --glowA: rgba(122,162,255,.28); --glowB: rgba(255,93,242,.22); }
+
+/* siatka kart */
+#panel-today .list{ display:grid; gap:12px; }
+
+/* karta z delikatnym neonem + lewy pasek gradientowy */
+#panel-today .list .item{
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 12px 12px 12px 18px;  /* + miejsce na pasek */
+  box-shadow:
+    0 4px 14px rgba(0,0,0,.18),
+    0 0 0 1px rgba(122,162,255,.08) inset;
+}
+[data-theme="dark"] #panel-today .list .item{
+  box-shadow:
+    0 10px 26px rgba(0,0,0,.35),
+    0 0 18px var(--glowA);
+}
+#panel-today .list .item::after{
+  content:"";
+  position:absolute;
+  left:6px; top:8px; bottom:8px; width:4px;
+  border-radius:4px;
+  background: linear-gradient(180deg, var(--accent), var(--neon-pink));
+  box-shadow: 0 0 10px var(--glowA), 0 0 16px var(--glowB);
+}
+
+/* „Pastylka” na godzinę wydarzenia (to <strong> w pierwszej kolumnie) */
+#panel-today #today-events .item > div:first-child strong{
+  display:inline-block;
+  padding:2px 8px;
+  margin-right:6px;
+  border-radius:999px;
+  background: rgba(122,162,255,.15);
+  border:1px solid rgba(122,162,255,.55);
+  box-shadow: 0 0 12px var(--glowA);
+}
+
+/* Badge priorytetu – mocniejsze glow dla Wysoki w „Dziś” */
+#panel-today .badge.high{
+  background: rgba(255,93,242,.16);
+  border-color:#ff5df2;
+  color:#ffd9fb;
+  box-shadow: 0 0 14px var(--glowB);
+}
+
+/* Przyciski w „Dziś” – delikatny neonowy akcent */
+#panel-today .controls button,
+#panel-today .row > button{
+  box-shadow: 0 0 0 1px rgba(122,162,255,.25) inset, 0 0 14px var(--glowA);
+}
+#panel-today .controls .btn-danger{
+  box-shadow: 0 0 0 1px rgba(220,0,0,.25) inset, 0 0 14px rgba(255,60,60,.18);
+}
+
+/* Respons: nic nie wychodzi poza kartę */
+#panel-today .item > div:first-child{ min-width:0; }
+#panel-today .item > div:first-child, 
+#panel-today .item > div:first-child *{
+  overflow-wrap:anywhere; word-break:break-word; white-space:pre-wrap;
+}
